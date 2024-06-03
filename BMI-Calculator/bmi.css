@@ -1,0 +1,12 @@
+.container-fluid {
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 700px;
+    height: 100%;
+    /* or 950px */
+}
+
+html,
+body {
+    height: 100vh;
+}

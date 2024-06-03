@@ -11,8 +11,6 @@ const myImage = document.getElementById("hangImg");
 let imgCounter = 1;
 let wrongLetCounter = 0;
 
-
-
 const myNumber = Math.floor(Math.random() * words.length);
 const myWord = words[myNumber].toLowerCase();
 console.log(myWord);
@@ -36,39 +34,48 @@ function checkLetter(event) {
     const clickedButton = event.target;
     const buttonText = clickedButton.textContent;
     let newGuessedWord = "";
+    let letterFound = false;
 
     // Update guessedWord with the correct letters
     for (let i = 0; i < myWord.length; i++) {
-        wrongLetCounter = 0;
         if (myWord[i] === buttonText) {
             newGuessedWord += buttonText;
+            letterFound = true;
         } else {
             newGuessedWord += guessedWord[i];
-            // Increment imagine scource
-            wrongLetCounter++;
         }
     }
 
-    if (wrongLetCounter > 0 && imgCounter < 7) {
-        imgCounter++;
-        myImage.setAttribute('src', "images/stage" + imgCounter + ".jpg");
-    } else {
-        const gameOVer = document.createElement("h3");
-        container.appendChild(gameOVer);
-        gameOVer.textContent = "The Word was: " + myWord;
-        var buttons = document.getElementsByTagName('button');
-        for (var i = 0; i < buttons.length; i++) {
-            buttons[i].disabled = true;
+    if (!letterFound) {
+        wrongLetCounter++;
+        if (imgCounter < 7) {
+            imgCounter++;
+            myImage.setAttribute('src', "images/stage" + imgCounter + ".jpg");
+        }
+        if (imgCounter >= 7) {
+            const gameOver = document.createElement("h3");
+            container.appendChild(gameOver);
+            gameOver.textContent = "The Word was: " + myWord;
+            disableButtons();
         }
     }
 
     guessedWord = newGuessedWord;
+
     if (!guessedWord.includes("_")) {
         const congratulations = document.createElement("h3");
         container.appendChild(congratulations);
         congratulations.textContent = "YOU GOT IT!";
+        disableButtons();
     }
 
     // Update the displayed word with spaces between underscores and letters
     wordElement.textContent = guessedWord.split('').join(' ');
+}
+
+function disableButtons() {
+    const buttons = document.getElementsByTagName('button');
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].disabled = true;
+    }
 }
